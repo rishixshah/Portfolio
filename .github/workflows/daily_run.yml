@@ -14,10 +14,10 @@ jobs:
 
     steps:
       - name: Check out repo code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4 # Updated to v4 to fix deprecation warning
 
       - name: Set up Python
-        uses: actions/setup-python@v4
+        uses: actions/setup-python@v5 # Updated to v5 to fix deprecation warning
         with:
           python-version: '3.10'
 
@@ -25,12 +25,12 @@ jobs:
         run: pip install -r requirements.txt
 
       - name: Run portfolio script
-        run: python app.py  # Check: Change app.py if your uploaded Python file has a different name!
+        run: python app.py  # <-- IMPORTANT: Change app.py to match your EXACT python file name on GitHub!
 
       - name: Commit & push updated chart image
         run: |
           git config --global user.name "GitHub Automation"
           git config --global user.email "actions@github.com"
-          git add latest_portfolio_chart.png
+          git add -A
           git commit -m "Auto-update portfolio chart [skip ci]" || exit 0
           git push
