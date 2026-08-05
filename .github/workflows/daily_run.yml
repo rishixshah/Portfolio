@@ -25,7 +25,7 @@ jobs:
         run: pip install -r requirements.txt
 
       - name: Run portfolio script
-        run: python app.py  # <-- IMPORTANT: Change app.py to match your EXACT python file name on GitHub!
+        run: python portfolio.py  # <-- IMPORTANT: Change app.py to match your EXACT python file name on GitHub!
 
       - name: Commit & push updated chart image
         run: |
