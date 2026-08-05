@@ -117,3 +117,13 @@ plt.tight_layout()
 st.pyplot(fig)
 # Save the rendered chart image directly to the repository folder
 plt.savefig("latest_portfolio_chart.png", dpi=300)
+# Save formatted summary table to a text file
+with open("portfolio_summary.txt", "w") as f:
+    f.write(f"====================================================\n")
+    f.write(f" TOTAL PORTFOLIO VALUE:  ${total_portfolio_value:,.2f}\n")
+    f.write(f" TODAY'S CHANGE:         {total_daily_change_dollars:+,.2f} ({total_daily_change_pct:+.2f}%)\n")
+    f.write(f" DATA AS OF:             {latest_date} (vs {prev_date})\n")
+    f.write(f"====================================================\n\n")
+    f.write(df_display.to_string())
+
+print("Summary table saved to portfolio_summary.txt")
