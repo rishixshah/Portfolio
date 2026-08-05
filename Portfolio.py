@@ -115,3 +115,5 @@ plt.grid(axis='y', linestyle='--', alpha=0.5)
 plt.tight_layout()
 
 st.pyplot(fig)
+# Save the rendered chart image directly to the repository folder
+plt.savefig("latest_portfolio_chart.png", dpi=300)
