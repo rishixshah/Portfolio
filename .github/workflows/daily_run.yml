@@ -14,10 +14,10 @@ jobs:
 
     steps:
       - name: Check out repo code
-        uses: actions/checkout@v4 # Updated to v4 to fix deprecation warning
+        uses: actions/checkout@v4
 
       - name: Set up Python
-        uses: actions/setup-python@v5 # Updated to v5 to fix deprecation warning
+        uses: actions/setup-python@v5
         with:
           python-version: '3.10'
 
@@ -25,7 +25,7 @@ jobs:
         run: pip install -r requirements.txt
 
       - name: Run portfolio script
-        run: python Portfolio.py  # <-- IMPORTANT: Change app.py to match your EXACT python file name on GitHub!
+        run: python Portfolio.py  # <-- Make sure 'portfolio.py' matches your exact python file name on GitHub!
 
       - name: Commit & push updated chart image
         run: |
