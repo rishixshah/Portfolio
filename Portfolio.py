@@ -47,6 +47,7 @@ with st.spinner('Fetching live market data...'):
     else:
         df_close = df_all[['Close']].copy()
         df_divs = df_all[['Dividends']].copy()
+    
     df_close = df_close.ffill().bfill()
     latest_date = df_close.index[-1].strftime('%Y-%m-%d')
     prev_date = df_close.index[-2].strftime('%Y-%m-%d')
@@ -115,6 +116,7 @@ st.divider()
 st.subheader("Holdings Summary")
 df_display = df_portfolio.copy()
 df_display['Latest Price'] = df_display['Latest Price'].map('${:,.2f}'.format)
+df_display['Prev Price'] = df_display['Prev Price'].map('${:,.2f}'.format)  # <-- ADDED LINE HERE
 df_display['Position Value ($)'] = df_display['Position Value ($)'].map('${:,.2f}'.format)
 df_display['1-Day Change ($)'] = df_display['1-Day Change ($)'].map('{:+,.2f}'.format)
 df_display['1-Day Change %'] = df_display['1-Day Change %'].map('{:+.2f}%'.format)
