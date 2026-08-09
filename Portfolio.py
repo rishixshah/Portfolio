@@ -47,7 +47,7 @@ with st.spinner('Fetching live market data...'):
     else:
         df_close = df_all[['Close']].copy()
         df_divs = df_all[['Dividends']].copy()
-df_close = df_close.ffill().bfill()
+    df_close = df_close.ffill().bfill()
     latest_date = df_close.index[-1].strftime('%Y-%m-%d')
     prev_date = df_close.index[-2].strftime('%Y-%m-%d')
 
