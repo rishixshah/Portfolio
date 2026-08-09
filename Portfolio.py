@@ -120,6 +120,7 @@ df_display['1-Day Change ($)'] = df_display['1-Day Change ($)'].map('{:+,.2f}'.f
 df_display['1-Day Change %'] = df_display['1-Day Change %'].map('{:+.2f}%'.format)
 df_display['YTD Return %'] = df_display['YTD Return %'].map('{:+.2f}%'.format)
 df_display['Divs Recd/Share'] = df_display['Divs Recd/Share'].map('${:,.2f}'.format)
+df_display['Prev Price'] = df_display['Prev Price'].map('${:,.2f}'.format)
 st.dataframe(df_display, use_container_width=True)
 
 # Save static files for background Actions
