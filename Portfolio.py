@@ -13,16 +13,20 @@ st.title("📈 Stock Portfolio Dashboard")
 # ==========================================
 # 1. PORTFOLIO CONFIGURATION (YOUR STOCKS)
 # ==========================================
-# Update your tickers and exact share quantities below:
 portfolio_shares = {
-    'AAPL': 100.0,
-    'MSFT': 50.0,
-    'NVDA': 75.0,
-    'AMZN': 40.0,
-    'GOOGL': 60.0
+    'AMZN': 400,
+    'AVGO': 2730,
+    'CEG': 90,
+    'CVX': 400,
+    'GEV': 176,
+    'GOOG': 1000,
+    'KLAC': 350,
+    'MSFT': 100,
+    'NVDA': 2000,
+    'TSM': 50,
+    'VST': 183
 }
 
-# Optional: Custom start dates for dividend tracking per ticker (if bought mid-year)
 custom_div_start_dates = {}
 tickers = list(portfolio_shares.keys())
 current_year_start = "2026-01-01"
@@ -39,7 +43,7 @@ with st.spinner('Pulling live market data from Yahoo Finance...'):
     for ticker in tickers:
         t = yf.Ticker(ticker)
 
-        # 1. Pull historical daily candles for YTD baseline & backup
+        # 1. Historical daily candles for YTD baseline & fallback
         hist = t.history(period="ytd", auto_adjust=False)
 
         # 2. Extract Exact Official Previous Close from Yahoo Finance
@@ -118,7 +122,7 @@ st.divider()
 # Position Values Chart
 st.subheader("Position Values & Gain/Loss")
 colors = ['#2ca02c' if x >= 0 else '#d62728' for x in df_portfolio['1-Day Change ($)']]
-fig, ax = plt.subplots(figsize=(12, 5))
+fig, ax = plt.subplots(figsize=(14, 5))
 bars = ax.bar(df_portfolio.index, df_portfolio['Position Value ($)'], color=colors, alpha=0.85)
 
 ax.yaxis.set_major_formatter(mtick.StrMethodFormatter('${x:,.0f}'))
