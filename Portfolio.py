@@ -7,14 +7,23 @@ import matplotlib.pyplot as plt
 import matplotlib.ticker as mtick
 
 # Page Configuration
-st.set_page_config(page_title="Stock Portfolio Dashboard", layout="wide")
+st.set_page_config(page_title="Overall Portfolio Dashboard", layout="wide")
 
-st.title("📈 Stock Portfolio Dashboard")
+st.title("💼 Total Portfolio Summary")
 
 # ==========================================
-# 1. PORTFOLIO CONFIGURATION (YOUR STOCKS)
+# 1. TOTAL PORTFOLIO CONFIGURATION (ALL HOLDINGS)
 # ==========================================
 portfolio_shares = {
+    # ETFs
+    'VIG': 751.162,
+    'VOO': 2200.489,
+    'VTI': 3893.905,
+    'JEPI': 4278.788,
+    'QQQ': 1095.637,
+    'SOXX': 132.604,
+    'SPYI': 3709,
+    # Stocks
     'AMZN': 400,
     'AVGO': 2730,
     'CEG': 90,
@@ -35,7 +44,7 @@ current_year_start = "2026-01-01"
 # ==========================================
 # 2. FETCH DIRECT YAHOO FINANCE DATA
 # ==========================================
-with st.spinner('Pulling live market data from Yahoo Finance...'):
+with st.spinner('Pulling comprehensive live portfolio data from Yahoo Finance...'):
     latest_prices = {}
     prev_prices = {}
     year_start_prices = {}
@@ -114,7 +123,7 @@ with st.spinner('Pulling live market data from Yahoo Finance...'):
 # 3. DISPLAY STREAMLIT UI METRICS
 # ==========================================
 col1, col2, col3 = st.columns(3)
-col1.metric("Total Stock Portfolio Value", f"${total_portfolio_value:,.2f}")
+col1.metric("Total Portfolio Value", f"${total_portfolio_value:,.2f}")
 col2.metric("Today's Change ($)", f"{'+' if total_daily_change_dollars >= 0 else '-'}${abs(total_daily_change_dollars):,.2f}", f"{total_daily_change_pct:+.2f}%")
 col3.metric("Data Source", "Yahoo Finance (Official Quote)")
 
@@ -131,11 +140,11 @@ text_labels = [
     for val, chg in zip(df_portfolio["Position Value ($)"], df_portfolio["1-Day Change ($)"])
 ]
 
-# Explicit 2-decimal formatting for tooltip fields
+# Explicit 2-decimal formatting
 hover_customdata = list(zip(
     df_portfolio['Shares'].apply(lambda x: f"{x:,.3f}".rstrip('0').rstrip('.')),
     df_portfolio['Latest Price'].apply(lambda x: f"{x:,.2f}"),
-    df_portfolio['1-Day Change ($ painful)'.split()[0] if '1-Day Change ($)' in df_portfolio else '1-Day Change ($)'].apply(lambda x: f"{'+' if x >= 0 else '-'}${abs(x):,.2f}"),
+    df_portfolio['1-Day Change ($)'].apply(lambda x: f"{'+' if x >= 0 else '-'}${abs(x):,.2f}"),
     df_portfolio['1-Day Change %'].apply(lambda x: f"{x:+.2f}%")
 ))
 
@@ -208,7 +217,7 @@ st.dataframe(df_display, use_container_width=True)
 st.markdown(f"### 💰 **Total YTD Dividends Received:** `${total_ytd_dividends:,.2f}`")
 
 # Static export files for background Actions
-with open("stock_summary.txt", "w") as f:
+with open("portfolio_summary.txt", "w") as f:
     f.write(df_display.to_string())
     f.write(f"\n\nTotal YTD Dividends Received: ${total_ytd_dividends:,.2f}")
 
@@ -224,5 +233,5 @@ for i, bar in enumerate(bars):
 ax.set_ylim(0, max_val * 1.25 if max_val > 0 else 1000)
 plt.xticks(rotation=45)
 plt.grid(axis='y', linestyle='--', alpha=0.3)
-plt.savefig("latest_stock_chart.png", dpi=300)
+plt.savefig("latest_portfolio_chart.png", dpi=300)
 plt.close(fig_static)
