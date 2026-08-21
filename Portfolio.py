@@ -121,7 +121,7 @@ col3.metric("Data Source", "Yahoo Finance (Official Quote)")
 st.divider()
 
 # ==========================================
-# 4. INTERACTIVE PLOTLY CHART
+# 4. INTERACTIVE PLOTLY CHART (2 DECIMAL PLACES)
 # ==========================================
 st.subheader("Position Values & Gain/Loss")
 
@@ -130,6 +130,14 @@ text_labels = [
     f"${val:,.0f}<br>({'+' if chg >= 0 else '-'}${abs(chg):,.0f})" 
     for val, chg in zip(df_portfolio["Position Value ($)"], df_portfolio["1-Day Change ($)"])
 ]
+
+# Explicit 2-decimal formatting for tooltip fields
+hover_customdata = list(zip(
+    df_portfolio['Shares'].apply(lambda x: f"{x:,.3f}".rstrip('0').rstrip('.')),
+    df_portfolio['Latest Price'].apply(lambda x: f"{x:,.2f}"),
+    df_portfolio['1-Day Change ($ painful)'.split()[0] if '1-Day Change ($)' in df_portfolio else '1-Day Change ($)'].apply(lambda x: f"{'+' if x >= 0 else '-'}${abs(x):,.2f}"),
+    df_portfolio['1-Day Change %'].apply(lambda x: f"{x:+.2f}%")
+))
 
 fig = go.Figure()
 
@@ -140,13 +148,13 @@ fig.add_trace(
         marker_color=bar_colors,
         text=text_labels,
         textposition="outside",
-        customdata=df_portfolio[["Shares", "Latest Price", "1-Day Change ($)", "1-Day Change %"]],
+        customdata=hover_customdata,
         hovertemplate=(
             "<b>%{x}</b><br>"
             + "Position Value: $%{y:,.2f}<br>"
-            + "Shares: %{customdata[0]:,.3f}<br>"
-            + "Current Price: $%{customdata[1]:,.2f}<br>"
-            + "1-Day Change: %{customdata[2]:+,.2f} (%{customdata[3]:+.2f}%)"
+            + "Shares: %{customdata[0]}<br>"
+            + "Current Price: $%{customdata[1]}<br>"
+            + "1-Day Change: %{customdata[2]} (%{customdata[3]})"
             + "<extra></extra>"
         ),
     )
@@ -163,12 +171,20 @@ fig.update_layout(
     ),
     xaxis=dict(tickangle=-45, showgrid=False),
     margin=dict(l=20, r=20, t=30, b=50),
-    height=450,
+    height=480,
     showlegend=False,
     template="plotly_dark",
 )
 
-st.plotly_chart(fig, use_container_width=True)
+st.plotly_chart(
+    fig, 
+    use_container_width=True, 
+    config={
+        'displayModeBar': True,
+        'scrollZoom': True,
+        'displaylogo': False
+    }
+)
 
 st.divider()
 
@@ -209,3 +225,4 @@ ax.set_ylim(0, max_val * 1.25 if max_val > 0 else 1000)
 plt.xticks(rotation=45)
 plt.grid(axis='y', linestyle='--', alpha=0.3)
 plt.savefig("latest_stock_chart.png", dpi=300)
+plt.close(fig_static)
